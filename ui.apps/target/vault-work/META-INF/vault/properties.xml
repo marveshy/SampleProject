@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>valtech - UI apps</comment>
+<entry key="createdBy">mboudoun</entry>
+<entry key="name">valtech.ui.apps</entry>
+<entry key="created">2017-10-06T16:43:02.416+0100</entry>
+<entry key="groupId">valtech</entry>
+<entry key="version">1.0-SNAPSHOT</entry>
+<entry key="requiresRoot">false</entry>
+<entry key="group">valtech</entry>
+<entry key="description">UI apps package for valtech</entry>
+<entry key="artifactId">valtech.ui.apps</entry>
+<entry key="path">/etc/packages/valtech/valtech.ui.apps.zip</entry>
+</properties>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <scr:component name="com.aem.valtech.core.servlets.SimpleServlet">
+        <implementation class="com.aem.valtech.core.servlets.SimpleServlet"/>
+        <service servicefactory="false">
+            <provide interface="javax.servlet.Servlet"/>
+        </service>
+        <property name="sling.servlet.paths">
+            /bin/hello
+        </property>
+        <property name="service.vendor" value="Adobe"/>
+        <property name="service.pid" value="com.aem.valtech.core.servlets.SimpleServlet"/>
+        <reference name="services" interface="com.aem.valtech.core.service.Services" cardinality="1..1" policy="static" bind="bindServices" unbind="unbindServices"/>
+    </scr:component>
+</components>
