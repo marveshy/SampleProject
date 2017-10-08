@@ -16,13 +16,13 @@
 new hobs.TestSuite("valtech Tests", {path:"/apps/valtechl/tests/SampleTests.js", register: true})
 
     .addTestCase(new hobs.TestCase("Hello World component on english page")
-        .navigateTo("/content/content/en.html")
-        .asserts.location("/content/content/en.html", true)
+        .navigateTo("/content/valtech/en.html")
+        .asserts.location("/content/valtech/en.html", true)
         .asserts.visible(".helloworld", true)
     )
 
     .addTestCase(new hobs.TestCase("Hello World component on french page")
-        .navigateTo("/content/content/fr.html")
-        .asserts.location("/content/content/fr.html", true)
+        .navigateTo("/content/valtech/fr.html")
+        .asserts.location("/content/valtech/fr.html", true)
         .asserts.visible(".helloworld", true)
     );

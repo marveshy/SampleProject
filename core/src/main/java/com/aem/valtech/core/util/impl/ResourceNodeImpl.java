@@ -31,7 +31,7 @@ public class ResourceNodeImpl implements ResourceNode {
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put(ResourceResolverFactory.SUBSERVICE, "writeService");
-			resourceResolver = resolverFactory.getServiceResourceResolver(param); // getAdministrativeResourceResolver(null);
+			resourceResolver = resolverFactory.getAdministrativeResourceResolver(null);
 																					// @Deprecated
 			Resource ressource = resourceResolver.getResource(resource);
 			if (ressource == null)

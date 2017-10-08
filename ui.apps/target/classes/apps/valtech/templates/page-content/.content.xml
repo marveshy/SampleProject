@@ -3,7 +3,7 @@
     jcr:description="Template with focus on content."
     jcr:primaryType="cq:Template"
     jcr:title="valtech Content Page"
-    allowedPaths="[/content/content/.+]"
+    allowedPaths="[/content/valtech/.+]"
     ranking="{Long}100">
     <jcr:content
         jcr:primaryType="cq:PageContent"

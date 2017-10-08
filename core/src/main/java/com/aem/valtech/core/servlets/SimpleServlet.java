@@ -32,7 +32,10 @@ import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.social.tally.Response;
 import com.aem.valtech.core.service.Services;
 
 // import com.aem.valtech.core.service.Services;
@@ -45,11 +48,12 @@ import com.aem.valtech.core.service.Services;
  * idempotent. For write operations use the {@link SlingAllMethodsServlet}.
  */
 @SuppressWarnings("serial")
-@SlingServlet(paths = "/bin/hello")
-public class SimpleServlet extends SlingSafeMethodsServlet {
+@SlingServlet(resourceTypes = "/bin/coucou")
+public class SimpleServlet extends SlingAllMethodsServlet {
 
-	private static final String VALTECH_PATH = "http://localhost:4502/content/content.1.json";
-
+	private final Logger LOGGER  = LoggerFactory.getLogger(SimpleServlet.class);
+	private static final String VALTECH_PATH = "http://localhost:4502/content/valtech.1.json";
+	
 	// @Reference
 	// private ResourceNode resourceNode ;
 	//
@@ -63,22 +67,18 @@ public class SimpleServlet extends SlingSafeMethodsServlet {
 	protected void doGet(final SlingHttpServletRequest req, final SlingHttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
+			LOGGER.error("coucou #############################################");
 			// Map<String, Object> param = new HashMap<String, Object>();
 			// param.put(ResourceResolverFactory.SUBSERVICE, "writeService");
 			// ResourceResolver resourceResolver =
 			// resolverFactory.getServiceResourceResolver(param);
 			// final Resource resource = req.getResource();
 			JSONObject jsonObject;
-
 			jsonObject = services.getPageInformation(VALTECH_PATH);
-			jsonObject.remove("jcr:primaryType");
-			jsonObject.remove("jcr:created");
-			jsonObject.remove("jcr:createdBy");
-			jsonObject.remove("jcr:content");
 			resp.getOutputStream().print(jsonObject.toString());
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

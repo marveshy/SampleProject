@@ -6,5 +6,6 @@
         </service>
         <property name="service.vendor" value="Adobe"/>
         <property name="service.pid" value="com.aem.valtech.core.service.ServicesImplement"/>
+        <reference name="resourceNode" interface="com.aem.valtech.core.util.inter.ResourceNode" cardinality="1..1" policy="static" bind="bindResourceNode" unbind="unbindResourceNode"/>
     </scr:component>
 </components>

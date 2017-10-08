@@ -3,8 +3,16 @@ package com.aem.valtech.core.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -20,47 +28,53 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 
+import com.aem.valtech.core.util.inter.ResourceNode;
+import com.sun.javafx.collections.MappingChange.Map;
+
 @Service
 @Component(metatype = false)
-public  class ServicesImplement implements Services {
-	
-	
-//	private InputStream getContent(final String url) ;
-//    HttpClient httpClient = new HttpClient();
-//    httpClient.getParams().setAuthenticationPreemptive(true);
-//    httpClient.getState().setCredentials(new AuthScope(null, -1, null),
-//        new UsernamePasswordCredentials("admin", "admin"));
-//    try {
-//        GetMethod get = new GetMethod(url);
-//        httpClient.executeMethod(get);
-//        if (get.getStatusCode() == HttpStatus.SC_OK) {
-//            return get.getResponseBodyAsStream();
-//        } else {
-//            LOGGER.error("HTTP Error: ", get.getStatusCode());
-//        }
-//    } catch (HttpException e) {
-//        LOGGER.error("HttpException: ", e);
-//    } catch (IOException e) {
-//        LOGGER.error("IOException: ", e);
-//    }
-//  }
-	
+public class ServicesImplement implements Services {
+
+	@Reference
+	private ResourceNode resourceNode;
+
+	// private InputStream getContent(final String url) ;
+	// HttpClient httpClient = new HttpClient();
+	// httpClient.getParams().setAuthenticationPreemptive(true);
+	// httpClient.getState().setCredentials(new AuthScope(null, -1, null),
+	// new UsernamePasswordCredentials("admin", "admin"));
+	// try {
+	// GetMethod get = new GetMethod(url);
+	// httpClient.executeMethod(get);
+	// if (get.getStatusCode() == HttpStatus.SC_OK) {
+	// return get.getResponseBodyAsStream();
+	// } else {
+	// LOGGER.error("HTTP Error: ", get.getStatusCode());
+	// }
+	// } catch (HttpException e) {
+	// LOGGER.error("HttpException: ", e);
+	// } catch (IOException e) {
+	// LOGGER.error("IOException: ", e);
+	// }
+	// }
+
 	@Override
-	public JSONObject getPageInformation( String url) throws ClientProtocolException, IOException, JSONException {
-		
+	public JSONObject getPageInformation(String url)
+			throws ClientProtocolException, IOException, JSONException {
+
 		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials
-		 = new UsernamePasswordCredentials("admin", "admin");
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+				"admin", "admin");
 		provider.setCredentials(AuthScope.ANY, credentials);
-		
-		HttpClient httpClient =  HttpClientBuilder.create()
-				  .setDefaultCredentialsProvider(provider)
-				  .build();   //HttpClientBuilder.create().build();
-  
+
+		HttpClient httpClient = HttpClientBuilder.create()
+				.setDefaultCredentialsProvider(provider).build();
+
 		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/json");		
-		HttpResponse responsee = httpClient. execute(getRequest);
-		BufferedReader br = new BufferedReader(new InputStreamReader((responsee.getEntity().getContent())));
+		getRequest.addHeader("accept", "application/json");
+		HttpResponse responsee = httpClient.execute(getRequest);
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				(responsee.getEntity().getContent())));
 		String output;
 		StringBuilder responseStrBuilder = new StringBuilder();
 		while ((output = br.readLine()) != null) {
@@ -69,15 +83,51 @@ public  class ServicesImplement implements Services {
 		br.close();
 		httpClient.getConnectionManager().shutdown();
 		JSONObject result = new JSONObject(responseStrBuilder.toString());
+		result.remove("jcr:primaryType");
+		result.remove("jcr:created");
+		result.remove("jcr:createdBy");
+		result.remove("jcr:content");
 		return result;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
+	@Override
+	public Node lastModifedNodeProperty(String resource)
+			throws RepositoryException {
+		Node queryRoot = resourceNode.getNodeForResource(resource);
+		// Node queryRoot = pageManager.getContainingPage(
+		// currentNode.getPath()).adaptTo(Node.class);
+		// List<String> list = new ArrayList<String>();
+		NodeIterator nodeIterator = queryRoot.getNodes();
+		if (nodeIterator != null) {
+			while (nodeIterator.hasNext()) {
+				Node node = nodeIterator.nextNode();
+				if (getNodeCreatedByAdmin(node) != null) {
+					Node nodeJcrContent = getNodeCreatedByAdmin(node).getNodes(
+							"jcr:content").nextNode();
+					nodeJcrContent.setProperty("jcr:lastModifed",
+							Calendar.getInstance());
+					
+				}
+			}
+
+		}
+		queryRoot.getSession().save();
+		return queryRoot;
+
+	}
+
+	@Override
+	public Node getNodeCreatedByAdmin(Node node) throws RepositoryException {
+		if (node != null) {
+			if (String.valueOf(node.getProperty("jcr:primaryType").getValue())
+					.equals("cq:Page")
+					&& String.valueOf(
+							node.getProperty("jcr:createdBy").getValue())
+							.equals("admin")) {
+				return node;
+			}
+		}
+		return null;
+
+	}
 }
