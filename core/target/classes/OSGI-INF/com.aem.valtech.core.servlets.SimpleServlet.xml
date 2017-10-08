@@ -5,10 +5,18 @@
             <provide interface="javax.servlet.Servlet"/>
         </service>
         <property name="sling.servlet.resourceTypes">
-            /apps/valtech/components/structure/page
+            valtech/components/structure/page
+        </property>
+        <property name="sling.servlet.selectors">
+            valtechPage
+        </property>
+        <property name="sling.servlet.methods">
+            GET
         </property>
         <property name="service.vendor" value="Adobe"/>
         <property name="service.pid" value="com.aem.valtech.core.servlets.SimpleServlet"/>
+        <reference name="resourceNode" interface="com.aem.valtech.core.util.inter.ResourceNode" cardinality="1..1" policy="static" bind="bindResourceNode" unbind="unbindResourceNode"/>
+        <reference name="resolverFactory" interface="org.apache.sling.api.resource.ResourceResolverFactory" cardinality="1..1" policy="static" bind="bindResolverFactory" unbind="unbindResolverFactory"/>
         <reference name="services" interface="com.aem.valtech.core.service.Services" cardinality="1..1" policy="static" bind="bindServices" unbind="unbindServices"/>
     </scr:component>
 </components>

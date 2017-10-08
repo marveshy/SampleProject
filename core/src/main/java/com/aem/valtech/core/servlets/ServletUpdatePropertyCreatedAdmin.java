@@ -20,12 +20,8 @@ import org.apache.sling.commons.json.JSONObject;
 import com.aem.valtech.core.service.Services;
 import com.aem.valtech.core.util.inter.ResourceNode;
 
-@SuppressWarnings("serial")
-@SlingServlet(paths = "/bin/koukou")
+@SlingServlet(resourceTypes = "valtech/components/structure/page", methods="GET", selectors="valtechLastModifed")
 public class ServletUpdatePropertyCreatedAdmin extends SlingAllMethodsServlet {
-
-	private static final String VALTECH_PATH = "http://localhost:4502/content/valtech.2.json";
-
 	@Reference
 	private ResourceResolverFactory resolverFactory;
 
@@ -34,46 +30,20 @@ public class ServletUpdatePropertyCreatedAdmin extends SlingAllMethodsServlet {
 
 	@Reference
 	private Services services;
+	
+	private static final String VALTECH_HOST = "http://localhost:4502";
+	private static final String VALTECH_SELECTOR=".2.json";
 
 	@Override
 	protected void doGet(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws ServletException,
 			IOException {
 		response.setHeader("Content-type", "application/json");
-		// JSONObject jsonObject = new JSONObject();
-		// JSONArray jsonArray = new JSONArray();
-		// PageManager pageManager =
-		// request.getResource().adaptTo(PageManager.class);
 		try {
-
-			// Node currentNode = request.getResource().adaptTo(Node.class);
-			Node queryRoot = services
-					.lastModifedNodeProperty("/content/valtech"); // resourceNode
-																	// .getNodeForResource("/content/valtech");
-			// Node queryRoot = pageManager.getContainingPage(
-			// currentNode.getPath()).adaptTo(Node.class);
-			// List<String> list = new ArrayList<String>();
-			// NodeIterator nodeIterator = queryRoot.getNodes();
-			// if (nodeIterator != null) {
-			// while (nodeIterator.hasNext()) {
-			// Node node = nodeIterator.nextNode();
-			// if (String.valueOf(
-			// node.getProperty("jcr:primaryType").getValue())
-			// .equals("cq:Page")
-			// && String.valueOf(
-			// node.getProperty("jcr:createdBy")
-			// .getValue()).equals("admin")) {
-			// list.add(node.getPath());
-			// Node nodeJcrContent = node.getNodes("jcr:content")
-			// .nextNode();
-			//
-			// nodeJcrContent.setProperty("jcr:lastModifed",
-			// Calendar.getInstance());
-			// // nodeJcrContent.getSession().save();
-			// }
-			// }
-		//	queryRoot.getSession().save();
-			JSONObject jsonObject = services.getPageInformation(VALTECH_PATH);
+			Node currentNode = request.getResource().adaptTo(Node.class);
+			Node parentNode= currentNode.getParent().getParent() ;			
+			Node node = services.lastModifedNodeProperty(parentNode.getPath());
+			JSONObject jsonObject = services.getPageInformation(VALTECH_HOST + node.getPath()+VALTECH_SELECTOR); // lastModifedNodeProperty(VALTECH_PATH);
 			response.getOutputStream().print(jsonObject.toString());
 
 		} catch (Exception e) {

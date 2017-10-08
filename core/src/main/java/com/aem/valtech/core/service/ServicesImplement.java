@@ -38,26 +38,6 @@ public class ServicesImplement implements Services {
 	@Reference
 	private ResourceNode resourceNode;
 
-	// private InputStream getContent(final String url) ;
-	// HttpClient httpClient = new HttpClient();
-	// httpClient.getParams().setAuthenticationPreemptive(true);
-	// httpClient.getState().setCredentials(new AuthScope(null, -1, null),
-	// new UsernamePasswordCredentials("admin", "admin"));
-	// try {
-	// GetMethod get = new GetMethod(url);
-	// httpClient.executeMethod(get);
-	// if (get.getStatusCode() == HttpStatus.SC_OK) {
-	// return get.getResponseBodyAsStream();
-	// } else {
-	// LOGGER.error("HTTP Error: ", get.getStatusCode());
-	// }
-	// } catch (HttpException e) {
-	// LOGGER.error("HttpException: ", e);
-	// } catch (IOException e) {
-	// LOGGER.error("IOException: ", e);
-	// }
-	// }
-
 	@Override
 	public JSONObject getPageInformation(String url)
 			throws ClientProtocolException, IOException, JSONException {
@@ -94,9 +74,6 @@ public class ServicesImplement implements Services {
 	public Node lastModifedNodeProperty(String resource)
 			throws RepositoryException {
 		Node queryRoot = resourceNode.getNodeForResource(resource);
-		// Node queryRoot = pageManager.getContainingPage(
-		// currentNode.getPath()).adaptTo(Node.class);
-		// List<String> list = new ArrayList<String>();
 		NodeIterator nodeIterator = queryRoot.getNodes();
 		if (nodeIterator != null) {
 			while (nodeIterator.hasNext()) {

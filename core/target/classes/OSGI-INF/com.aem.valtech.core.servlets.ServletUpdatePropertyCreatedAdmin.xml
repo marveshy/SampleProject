@@ -4,8 +4,14 @@
         <service servicefactory="false">
             <provide interface="javax.servlet.Servlet"/>
         </service>
-        <property name="sling.servlet.paths">
-            /bin/koukou
+        <property name="sling.servlet.resourceTypes">
+            valtech/components/structure/page
+        </property>
+        <property name="sling.servlet.selectors">
+            valtechLastModifed
+        </property>
+        <property name="sling.servlet.methods">
+            GET
         </property>
         <property name="service.vendor" value="Adobe"/>
         <property name="service.pid" value="com.aem.valtech.core.servlets.ServletUpdatePropertyCreatedAdmin"/>

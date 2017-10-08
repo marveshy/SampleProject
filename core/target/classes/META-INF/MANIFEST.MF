@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1507480491362
+Bnd-LastModified: 1507491620502
 Build-Jdk: 1.8.0_144
 Built-By: mohammed
 Bundle-Description: Core bundle for valtech

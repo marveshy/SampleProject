@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jcr.AccessDeniedException;
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.servlet.ServletException;
 
 import org.apache.felix.scr.annotations.Reference;
@@ -26,6 +30,7 @@ import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
@@ -37,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.social.tally.Response;
 import com.aem.valtech.core.service.Services;
+import com.aem.valtech.core.util.inter.ResourceNode;
 
 // import com.aem.valtech.core.service.Services;
 // import com.aem.valtech.core.util.inter.ResourceNode;
@@ -47,38 +53,43 @@ import com.aem.valtech.core.service.Services;
  * {@link SlingSafeMethodsServlet} shall be used for HTTP methods that are
  * idempotent. For write operations use the {@link SlingAllMethodsServlet}.
  */
-@SuppressWarnings("serial")
-@SlingServlet(resourceTypes = "/bin/coucou")
-public class SimpleServlet extends SlingAllMethodsServlet {
 
-	private final Logger LOGGER  = LoggerFactory.getLogger(SimpleServlet.class);
-	private static final String VALTECH_PATH = "http://localhost:4502/content/valtech.1.json";
+@SlingServlet(resourceTypes = "valtech/components/structure/page", methods="GET", selectors="valtechPage")
+public class ServletPage extends SlingAllMethodsServlet {
+
+	private final Logger LOGGER  = LoggerFactory.getLogger(ServletPage.class);
+	private static final String VALTECH_HOST = "http://localhost:4502";
+	private static final String VALTECH_SELECTOR=".1.json";
+	 @Reference
+	 private ResourceNode resourceNode ;
 	
-	// @Reference
-	// private ResourceNode resourceNode ;
-	//
-	// @Reference
-	// private ResourceResolverFactory resolverFactory;
+	 @Reference
+	 private ResourceResolverFactory resolverFactory;
 
 	@Reference
 	private Services services;
 
 	@Override
-	protected void doGet(final SlingHttpServletRequest req, final SlingHttpServletResponse resp)
+	protected void doGet(final SlingHttpServletRequest request, final SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			LOGGER.error("coucou #############################################");
-			// Map<String, Object> param = new HashMap<String, Object>();
-			// param.put(ResourceResolverFactory.SUBSERVICE, "writeService");
-			// ResourceResolver resourceResolver =
-			// resolverFactory.getServiceResourceResolver(param);
-			// final Resource resource = req.getResource();
+		try {			
+			Node currentNode = request.getResource().adaptTo(Node.class);
+			Node parentNode= currentNode.getParent() ;
 			JSONObject jsonObject;
-			jsonObject = services.getPageInformation(VALTECH_PATH);
-			resp.getOutputStream().print(jsonObject.toString());
+			jsonObject = services.getPageInformation(VALTECH_HOST+parentNode.getParent().getPath()+VALTECH_SELECTOR);
+			response.getOutputStream().print(jsonObject.toString());
 			
 		} catch (JSONException e) {
 			
+			e.printStackTrace();
+		} catch (AccessDeniedException e) {
+			response.getOutputStream().print("acces denied");
+			e.printStackTrace();
+		} catch (ItemNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
