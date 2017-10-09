@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <scr:component immediate="true" name="com.aem.valtech.core.listeners.SimpleResourceListener">
+        <implementation class="com.aem.valtech.core.listeners.SimpleResourceListener"/>
+        <service servicefactory="false">
+            <provide interface="javax.jcr.observation.EventListener"/>
+        </service>
+        <property name="service.vendor" value="Adobe"/>
+        <property name="service.pid" value="com.aem.valtech.core.listeners.SimpleResourceListener"/>
+        <reference name="services" interface="com.aem.valtech.core.service.Services" cardinality="1..1" policy="static" bind="bindServices" unbind="unbindServices"/>
+        <reference name="repository" interface="org.apache.sling.jcr.api.SlingRepository" cardinality="1..1" policy="static" bind="bindRepository" unbind="unbindRepository"/>
+    </scr:component>
+</components>

@@ -19,5 +19,7 @@ public interface Services {
 	Node lastModifedNodeProperty(String resource) throws RepositoryException;
 	
 	Node getNodeCreatedByAdmin(Node node) throws RepositoryException ;
+	
+	boolean addPropertyToPage(Node node) throws RepositoryException ;
 
 }

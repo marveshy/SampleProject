@@ -43,12 +43,11 @@ public class ServletUpdatePropertyCreatedAdmin extends SlingAllMethodsServlet {
 			Node currentNode = request.getResource().adaptTo(Node.class);
 			Node parentNode= currentNode.getParent().getParent() ;			
 			Node node = services.lastModifedNodeProperty(parentNode.getPath());
-			JSONObject jsonObject = services.getPageInformation(VALTECH_HOST + node.getPath()+VALTECH_SELECTOR); // lastModifedNodeProperty(VALTECH_PATH);
+			JSONObject jsonObject = services.getPageInformation(VALTECH_HOST + node.getPath()+VALTECH_SELECTOR);
 			response.getOutputStream().print(jsonObject.toString());
 
 		} catch (Exception e) {
-			response.getOutputStream().println(e.getMessage());
-			e.printStackTrace();
+			response.getOutputStream().println(e.getMessage());			
 		}
 
 	}

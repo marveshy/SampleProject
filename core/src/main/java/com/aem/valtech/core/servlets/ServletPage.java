@@ -44,20 +44,11 @@ import com.adobe.cq.social.tally.Response;
 import com.aem.valtech.core.service.Services;
 import com.aem.valtech.core.util.inter.ResourceNode;
 
-// import com.aem.valtech.core.service.Services;
-// import com.aem.valtech.core.util.inter.ResourceNode;
-
-/**
- * Servlet that writes some sample content into the response. It is mounted for
- * all resources of a specific Sling resource type. The
- * {@link SlingSafeMethodsServlet} shall be used for HTTP methods that are
- * idempotent. For write operations use the {@link SlingAllMethodsServlet}.
- */
 
 @SlingServlet(resourceTypes = "valtech/components/structure/page", methods="GET", selectors="valtechPage")
 public class ServletPage extends SlingAllMethodsServlet {
 
-	private final Logger LOGGER  = LoggerFactory.getLogger(ServletPage.class);
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static final String VALTECH_HOST = "http://localhost:4502";
 	private static final String VALTECH_SELECTOR=".1.json";
 	 @Reference
@@ -78,19 +69,24 @@ public class ServletPage extends SlingAllMethodsServlet {
 			JSONObject jsonObject;
 			jsonObject = services.getPageInformation(VALTECH_HOST+parentNode.getParent().getPath()+VALTECH_SELECTOR);
 			response.getOutputStream().print(jsonObject.toString());
+		
+			logger.info("########################## info ###################");
+			logger.error("######################## errrrrrrrrrrrrrrrrrrror");
+			
 			
 		} catch (JSONException e) {
 			
 			e.printStackTrace();
 		} catch (AccessDeniedException e) {
 			response.getOutputStream().print("acces denied");
-			e.printStackTrace();
+			
 		} catch (ItemNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.getOutputStream().print("item not found");
+			logger.error("item not found");
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("repository not found");
+			
 		}
 	}
 }

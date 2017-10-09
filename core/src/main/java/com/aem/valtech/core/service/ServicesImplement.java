@@ -107,4 +107,18 @@ public class ServicesImplement implements Services {
 		return null;
 
 	}
+
+	@Override
+	public boolean addPropertyToPage(Node node) throws RepositoryException {
+		if(node!=null){
+			Node jcrContent = node.getNode("jcr:content");
+			if(jcrContent!=null){
+				jcrContent.setProperty("proerty", "page added successfully");
+				jcrContent.getSession().save();
+				return true;
+			}
+		}
+		return false;
+		
+	}
 }

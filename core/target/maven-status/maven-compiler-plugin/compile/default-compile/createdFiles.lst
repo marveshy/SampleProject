@@ -1,4 +1,3 @@
-com\aem\valtech\core\servlets\SimpleServlet.class
 com\aem\valtech\core\util\inter\JsonConverter.class
 com\aem\valtech\core\filters\LoggingFilter.class
 com\aem\valtech\core\util\impl\ResourceNodeImpl.class
@@ -10,3 +9,4 @@ com\aem\valtech\core\service\Services.class
 com\aem\valtech\core\service\ServicesImplement.class
 com\aem\valtech\core\util\inter\ResourceNode.class
 com\aem\valtech\core\schedulers\SimpleScheduledTask.class
+com\aem\valtech\core\servlets\ServletPage.class
